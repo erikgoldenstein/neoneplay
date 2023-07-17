@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+
+.tooltip {
+    @apply invisible absolute;
+}
+  
+.has-tooltip:hover .tooltip {
+    @apply visible z-50;
+}
+
+@tailwind utilities;
+
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.floatingedges .react-flow__handle {
+    opacity: 0;
+  }
