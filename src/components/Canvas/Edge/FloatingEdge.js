@@ -1,7 +1,10 @@
 import { useCallback, useEffect } from 'react';
 import { useStore, getBezierPath, EdgeLabelRenderer } from 'reactflow';
-
 import { getEdgeParams } from './utils.js';
+
+
+// Credit: Taken from React Flow example: 
+// https://reactflow.dev/docs/examples/edges/floating-edges/
 
 function FloatingEdge({ id, source, target, markerEnd, style, label }) {
     const sourceNode = useStore(useCallback((store) => store.nodeInternals.get(source), [source]));

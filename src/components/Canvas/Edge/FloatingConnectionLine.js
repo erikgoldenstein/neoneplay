@@ -1,7 +1,9 @@
 import React from 'react';
 import { getBezierPath, getStraightPath, getSmoothStepPath } from 'reactflow';
-
 import { getEdgeParams } from './utils.js';
+
+// Credit: Taken from React Flow example: 
+// https://reactflow.dev/docs/examples/edges/floating-edges/
 
 function FloatingConnectionLine({ toX, toY, fromPosition, toPosition, fromNode }) {
     console.log("LINE:", fromPosition, toPosition)

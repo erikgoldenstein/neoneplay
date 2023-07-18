@@ -1,5 +1,8 @@
 import { Position, MarkerType } from 'reactflow';
 
+// Credit: Taken from React Flow example: 
+// https://reactflow.dev/docs/examples/edges/floating-edges/
+
 // this helper function returns the intersection point
 // of the line between the center of the intersectionNode and the target node
 function getNodeIntersection(intersectionNode, targetNode) {
