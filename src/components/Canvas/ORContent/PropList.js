@@ -1,4 +1,7 @@
 import iri_description from '@/ontology/iri-description';
+import embobject_properties from '@/ontology/embobject-properties';
+import standard_values from '@/ontology/standard-values';
+
 import { useEffect, useState } from 'react';
 import PropLine from './PropLine';
 import isValidHttpUrl from '@/helpers/isValidHttpUrl';
@@ -7,63 +10,106 @@ import { operation } from '@/helpers/Enums';
 
 
 const PropList = ({ id, cardData, expansionState, links, setLinks, inEdit, setInEdit, setRefetch, token }) => {
-    const [enrichedData, setEnrichedData] = useState([])
-    const [elemList, setElemList] = useState([])
     const [data, setData] = useState([])
-    const [changeList, setChangeList] = useState([])
+    const [changeMap, setChangeMap] = useState({})
 
-
-    useEffect(() => { console.log("updateChangelist monitor:", changeList) }, [changeList])
-
+    useEffect(() => {
+        if (!inEdit) {
+            setData(data.filter((line) => !line.isAddedLine))
+        }
+    }, [inEdit])
 
     useEffect(() => {
         const patchDataCall = async () => {
             if (inEdit == 2) {
-                let isChanged = false;
-                for (let index in changeList) {
-                    if (Object.keys(changeList[index]).length) {
-                        isChanged = true;
-                        console.log("change in:", index)
-                    }
-                }
-                if (isChanged) {
-
+                if (Object.keys(changeMap).length > 0) {
                     let changeObj = [];
-                    for (let index in changeList) {
-                        console.log("elem that is viewed at:", index, "content:", changeList[index])
-                        if (Object.keys(changeList[index]).length) {
-                            console.log("enter in change")
-                            if (changeList[index].op == operation.Change) {
-                                console.log("addings diffs")
-                                changeObj.push(
-                                    {
-                                        "@type": "api:Operation",
-                                        "api:op": { "@id": "api:DELETE" },
-                                        "api:s": id,
-                                        "api:p": "https://onerecord.iata.org/ns/cargo#" + changeList[index].label,
-                                        "api:o": [{
-                                            "@type": "api:OperationObject",
-                                            "api:hasDatatype": "http://www.w3.org/2001/XMLSchema#string",
-                                            "api:hasValue": changeList[index].oldValue
-                                        }]
-                                    });
-                                changeObj.push(
-                                    {
-                                        "@type": "api:Operation",
-                                        "api:op": { "@id": "api:ADD" },
-                                        "api:s": id,
-                                        "api:p": "https://onerecord.iata.org/ns/cargo#" + changeList[index].label,
-                                        "api:o": [{
-                                            "@type": "api:OperationObject",
-                                            "api:hasDatatype": "http://www.w3.org/2001/XMLSchema#string",
-                                            "api:hasValue": changeList[index].newValue
-                                        }]
-                                    })
+                    // index is the key of the map
+                    for (const index in changeMap) {
+                        if (changeMap[index].op == operation.Change) {
+                            changeObj.push(
+                                {
+                                    "@type": "api:Operation",
+                                    "api:op": { "@id": "api:DELETE" },
+                                    "api:s": changeMap[index].parent,
+                                    "api:p": "https://onerecord.iata.org/ns/cargo#" + changeMap[index].label,
+                                    "api:o": [{
+                                        "@type": "api:OperationObject",
+                                        "api:hasDatatype": changeMap[index].type,
+                                        "api:hasValue": changeMap[index].oldValue
+                                    }]
+                                });
+                            changeObj.push(
+                                {
+                                    "@type": "api:Operation",
+                                    "api:op": { "@id": "api:ADD" },
+                                    "api:s": changeMap[index].parent,
+                                    "api:p": "https://onerecord.iata.org/ns/cargo#" + changeMap[index].label,
+                                    "api:o": [{
+                                        "@type": "api:OperationObject",
+                                        "api:hasDatatype": changeMap[index].type,
+                                        "api:hasValue": changeMap[index].newValue
+                                    }]
+                                })
 
+                        }
+                        if (changeMap[index].op == operation.Delete) {
+                            changeObj.push(
+                                {
+                                    "@type": "api:Operation",
+                                    "api:op": { "@id": "api:DELETE" },
+                                    "api:s": changeMap[index].parent,
+                                    "api:p": "https://onerecord.iata.org/ns/cargo#" + changeMap[index].label,
+                                    "api:o": [{
+                                        "@type": "api:OperationObject",
+                                        "api:hasDatatype": changeMap[index].type,
+                                        "api:hasValue": changeMap[index].oldValue
+                                    }]
+                                });
+                        }
+                        if (changeMap[index].op == operation.Add) {
+                            changeObj.push(
+                                {
+                                    "@type": "api:Operation",
+                                    "api:op": { "@id": "api:ADD" },
+                                    "api:s": changeMap[index].parent,
+                                    "api:p": "https://onerecord.iata.org/ns/cargo#" + changeMap[index].label,
+                                    "api:o": [{
+                                        "@type": "api:OperationObject",
+                                        "api:hasDatatype": changeMap[index].type,
+                                        "api:hasValue": changeMap[index].newValue
+                                    }]
+                                });
+
+                            let objectType = changeMap[index].type.split('#').pop()
+                            let objectDesc = iri_description[':' + objectType]
+                            if (objectDesc && objectDesc.Type == 'EmbeddedObject') {
+                                let embobj = embobject_properties[changeMap[index].type.split('#').pop()];
+                                for (const property of embobj.properties) {
+                                    console.log('dav')
+                                    console.log(standard_values['http://www.w3.org/2001/XMLSchema#dateTime'])
+                                    let propertyDesc = iri_description[':' + property]
+                                    console.log(propertyDesc)
+                                    if (propertyDesc && propertyDesc.Type == 'DataProperty') {
+                                        changeObj.push(
+                                            {
+                                                "@type": "api:Operation",
+                                                "api:op": { "@id": "api:ADD" },
+                                                "api:s": changeMap[index].newValue,
+                                                "api:p": "https://onerecord.iata.org/ns/cargo#"+property,
+                                                "api:o": [{
+                                                    "@type": "api:OperationObject",
+                                                    "api:hasDatatype": propertyDesc.TypeIRI,
+                                                    "api:hasValue": standard_values[propertyDesc.TypeIRI]
+                                                }]
+                                            });
+                                    }
+                                }
                             }
+
                         }
                     }
-                    console.log(changeObj)
+                    const changes = Object.values(changeMap).map(change => change.label).join(',');
                     const body_obj = {
                         "@context": {
                             "cargo": "https://onerecord.iata.org/ns/cargo#",
@@ -73,13 +119,15 @@ const PropList = ({ id, cardData, expansionState, links, setLinks, inEdit, setIn
                         "api:hasLogisticsObject": {
                             "@id": id
                         },
-                        "api:hasDescription": "automatic change using neoneplay",
+                        "api:hasDescription": "Change on " + changes,
                         "api:hasOperation": changeObj,
-                        "api:hasRevision": cardData.headers["latest-revision"]
+                        "api:hasRevision": {
+                            "@type": "http://www.w3.org/2001/XMLSchema#positiveInteger",
+                            "@value": cardData.headers["latest-revision"]
+                        }
                     }
                     //make fetch
                     if (Object.keys(body_obj["api:hasOperation"]).length) {
-                        console.log("given correct body:", body_obj)
                         let res = await fetch(id, {
                             method: "PATCH",
                             headers: {
@@ -88,7 +136,6 @@ const PropList = ({ id, cardData, expansionState, links, setLinks, inEdit, setIn
                             },
                             body: JSON.stringify(body_obj)
                         })
-                        console.log("RESPONSE CODE", res.status)
                         if (res.status == 201) {
                             setInEdit(0)
                             setRefetch(true)
@@ -96,297 +143,184 @@ const PropList = ({ id, cardData, expansionState, links, setLinks, inEdit, setIn
                     } else {
                         console.log("body obj not parsed")
                     }
+                } else {
+                    setInEdit(0)
                 }
                 return
             }
+            if (inEdit == 0 && Object.keys(changeMap).length != 0) {
+                setChangeMap({})
+            }
         }
         patchDataCall()
-    }, [inEdit, changeList])
 
-
-    useEffect(() => {
-        const getReadableData = (data) => {
-            let propObjList = [];
-            let computerList = Object.keys(data.body)
-            computerList.map((property) => {
-                if (property[0] != "@") {
-                    let iri_prefixed = ":" + property.split("#").at(-1)
-                    let object = iri_description[iri_prefixed]
-                    if (!object) {
-                        object = { Label: <span className='text-red-500'>{property.split("#").at(-1)}</span>, Description: "Invalid One Record Property" }
-                    }
-                    object.val = data.body[property]
-                    propObjList.push(object)
-                }
-            })
-            setEnrichedData(propObjList);
-        }
-
-        cardData && (cardData.body["@id"] == id) && getReadableData(cardData)
-    }, [cardData])
+    }, [inEdit, changeMap])
 
     useEffect(() => {
-        console.log("NEW CALL")
-        let links = [];
-        let data = []
-
-        enrichedData.map((property, index) => {
-            // decide what data type it is
-            if ((typeof property.val) == "object" && !Array.isArray(property.val)) {
-                // is object
-                if (Object.keys(property.val).includes("@id") && Object.keys(property.val).includes("@type")) {
-                    // is embedded object
-                    if (property.Label == "grossWeight") {
-                        const line = {
-                            label: "Weight",
-                            description: property.Description,
-                            // value: "↓ embedded ↓",
-                            value: `${+property.val["https://onerecord.iata.org/ns/cargo#numericalValue"]["@value"]} ${property.val["https://onerecord.iata.org/ns/cargo#unit"]}`,
-                            indentation: 0,
-                            isImage: false,
-                            isURL: false,
-                            isEditable: false
-                        };
-                        data.push(line);
-                    } else {
-                        const line = {
-                            label: property.Label,
-                            description: property.Description,
-                            // value: "↓ embedded ↓",
-                            value: "",
-                            indentation: 0,
-                            isImage: false,
-                            isURL: false,
-                            isEditable: false
-                        };
-                        data.push(line);
-                        Object.keys(property.val).map((key, index) => {
-                            if (key[0] == "@") { return }
-                            console.log(property.val[key])
-                            const iri = key.split("#").at(-1)
-                            let description = "no description available"
-                            if (iri_description[":" + iri]) {
-                                description = iri_description[":" + iri].Description
-                            }
-                            let value;
-                            if (typeof property.val[key] === "object") {
-                                value = property.val[key]["@value"]
-                            } else if (typeof property.val[key] === "string") {
-                                value = property.val[key]
-                            }
-                            const line = {
-                                label: iri,
-                                description: description,
-                                value: value,
-                                indentation: 1,
-                                isImage: false,
-                                isURL: false,
-                                isEditable: true
-                            };
-                            data.push(line);
-                        })
-                    }
-
-
-                } else if (Object.keys(property.val).includes("@id") && isValidHttpUrl(property.val["@id"])) {
-                    // is external object DONE
-                    links = links.concat([{ loType: property.Label, loLocation: property.val["@id"], displayBelow: true }])
-                } else {
-                    console.log("Object else")
-                }
-            } else if (Array.isArray(property.val)) {
-                // is list
-                if (Object.keys(property.val[0]).includes("@id") && Object.keys(property.val[0]).includes("@type")) {
-                    property.val.map((_, list_index) => {
-                        const line = {
-                            label: (property.Label + " [" + (list_index + 1).toString() + "]"),
-                            description: property.Description,
-                            value: "",
-                            indentation: 0,
-                            isImage: false,
-                            isURL: false,
-                            isEditable: false
-                        };
-                        data.push(line);
-
-
-                        Object.keys(property.val[list_index]).map((key, obj_index) => {
-                            console.log(property.val[list_index])
-                            console.log("Key:", key)
-                            // console.log("Key:", key)
-                            if (key[0] == "@" && key != "@type") { return }
-                            if (key == "@type") { return }
-
-                            const iri = key.split("#").at(-1)
-                            let description = "no description available"
-                            if (iri_description[":" + iri]) {
-                                description = iri_description[":" + iri].Description
-                            }
-                            let value;
-                            if (typeof property.val[list_index][key] === "object") {
-                                // if has @id and is valid url add link
-                                if (Object.keys(property.val[list_index][key]).includes("@id") && isValidHttpUrl(property.val[list_index][key]["@id"]) && key.split("#").at(-1) == "involvedParties") {
-                                    // if (Object.keys(property.val[list_index][key]).includes("@id") && isValidHttpUrl(property.val[list_index][key]["@id"])) {
-                                    console.log("WE ARE HERE:", list_index, key)
-                                    const linked_obj = property.val[list_index][key]["@id"]
-                                    const name = property.val[list_index]["https://onerecord.iata.org/ns/cargo#role"]
-                                    links = links.concat([{ loType: name, loLocation: property.val[list_index][key]["@id"], displayBelow: false }])
-                                    const line = {
-                                        label: name,
-                                        description: "List of external linked Objects",
-                                        value: linked_obj,
-                                        indentation: 1,
-                                        isImage: false,
-                                        isURL: false,
-                                        isEditable: false,
-                                        isExtObj: true
-                                    };
-                                    data.push(line)
-                                } else if (Object.keys(property.val[list_index][key]).includes("@id") && isValidHttpUrl(property.val[list_index][key]["@id"])) {
-                                    const linked_obj = property.val[list_index][key]["@id"]
-                                    const name = key.split("#").at(-1)
-                                    links = links.concat([{ loType: name, loLocation: property.val[list_index][key]["@id"], displayBelow: false }])
-                                    const line = {
-                                        label: name,
-                                        description: "List of external linked Objects",
-                                        value: linked_obj,
-                                        indentation: 1,
-                                        isImage: false,
-                                        isURL: false,
-                                        isEditable: false,
-                                        isExtObj: true
-                                    };
-                                    data.push(line)
-
-
-                                } else if (Object.keys(property.val[list_index][key]).includes("@value")) {
-                                    // if has value display value
-                                    value = property.val[list_index][key]["@value"]
-                                    const line = {
-                                        label: iri,
-                                        description: description,
-                                        value: value,
-                                        indentation: 1,
-                                        isImage: false,
-                                        isURL: false,
-                                        isEditable: true
-                                    };
-                                    data.push(line);
-                                }
-                            } else if (typeof property.val[list_index][key] === "string") {
-                                value = property.val[list_index][key]
-                            }
-                        })
-                        console.log(property.val)
-                    })
-
-                    property.val.map(() => {
-
-                    })
-                    // console.log("EMBEDDED OBJECT LIST")
-                } else if (Object.keys(property.val[0]).includes("@id") && isValidHttpUrl(property.val[0]["@id"])) {
-                    // is list of external object
-                    property.val.map((_, index) => {
-                        links = links.concat([{ loType: property.Label, loLocation: property.val[index]["@id"], displayBelow: true }])
-                    })
-                }
-            } else if (isValidHttpUrl(property.val)) {
-                // is external URL
-                const line = {
-                    label: property.Label,
-                    description: property.Description,
-                    value: property.val,
-                    indentation: 0,
-                    isImage: false,
-                    isURL: true,
-                    isEditable: false
-                };
-                data.push(line);
-                console.log("external Link")
-            } else if ((typeof property.val) === "string") {
-                const line = {
-                    label: property.Label,
-                    description: property.Description,
-                    value: property.val,
-                    indentation: 0,
-                    isImage: false,
-                    isURL: false,
-                    isEditable: true
-                };
-                data.push(line);
-
-
-            } else {
-                throw Error("Unknown ONE-RECORD Data")
-            }
-
-            // manage links
-            if (index + 1 == enrichedData.length) {
-                setLinks(links)
-            }
-            // is link
-            // is text
-            // console.log("Links:", links)
-        })
-        if (links.length) {
+        const recursiveParse = (data, property, parent, indentation, lineContainer, innerlinks, index) => {
             const line = {
-                label: "Linked Objects",
-                description: "List of external linked Objects",
-                value: "",
-                indentation: 0,
+                label: '',
+                description: '',
+                value: '',
+                type: '',
+                indentation: indentation,
                 isImage: false,
                 isURL: false,
-                isEditable: false
+                isEditable: false,
+                isDeletable: true,
+                parent: parent,
+                isExtObj: false,
+                index: index,
+                isEmbeddedObj: false
             };
-            data.push(line)
-            links.map(({ loType, loLocation, displayBelow }) => {
-                if (displayBelow) {
-                    const line = {
-                        label: loType,
-                        description: "List of external linked Objects",
-                        value: loLocation,
-                        indentation: 1,
-                        isImage: false,
-                        isURL: false,
-                        isEditable: false,
-                        isExtObj: true
-                    };
-                    data.push(line)
+            let iri_prefixed = property.split("#").pop()
+            let object = iri_description[":" + iri_prefixed]
+            if (!object) {
+                line.label = <span className='text-red-500'>{iri_prefixed}</span>
+                line.description = "Invalid One Record Property"
+                line.type = data["@type"]
+            } else {
+                line.label = object.Label;
+                line.description = object.Description
+                line.type = object.TypeIRI
+            }
+
+            if (typeof data === 'object' && data !== null && !Array.isArray(data)) {
+                //External link
+                if (data["@id"] != null && isValidHttpUrl(data["@id"])) {
+                    line.isEditable = true
+                    line.isExtObj = true
+                    line.value = data["@id"]
+                    innerlinks.push({ loType: line.label, loLocation: data["@id"] })
+                    lineContainer.push(line)
                 }
-
-            })
+                // Value
+                if (data["@value"] != null) {
+                    line.isEditable = true
+                    line.value = data["@value"]
+                    lineContainer.push(line)
+                }
+                //Embedded object
+                if (data["@id"] != null && !isValidHttpUrl(data["@id"])) {
+                    line.value = data["@id"]
+                    line.isEmbeddedObj = true
+                    lineContainer.push(line)
+                    let keys = Object.keys(data)
+                    keys.map((property) => {
+                        if (property[0] != "@") {
+                            recursiveParse(data[property], property, data["@id"], indentation + 1, lineContainer, innerlinks, 0)
+                        }
+                    })
+                }
+            } else if (Array.isArray(data)) {
+                data.map((item, index) => {
+                    recursiveParse(item, property, parent, indentation, lineContainer, innerlinks, (index + 1))
+                })
+            } else {
+                if (isValidHttpUrl(data)) {
+                    line.isEditable = true
+                    line.value = data
+                    line.isURL = true;
+                } else {
+                    line.isEditable = true
+                    line.value = data
+                }
+                lineContainer.push(line);
+            }
         }
+        //Start Function
+        let innerlinks = []
+        let lineContainer = []
+        if (cardData && cardData.body["@id"] == id) {
+            let keys = Object.keys(cardData.body)
+            keys.map((property) => {
+                if (property[0] != "@") {
+                    recursiveParse(cardData.body[property], property, id, 0, lineContainer, innerlinks, 0)
+                }
+            })
 
-        setData(data)
-        setChangeList([...Array(data.length).fill(0).map(x => ({}))])
-        // create Data and Links here
+        }
+        //Set Data in the component
+        setData(lineContainer)
+        setLinks(innerlinks)
+        setChangeMap({})
+    }, [cardData])
 
-    }, [enrichedData])
+    const addProperty = (parentValue, parentIndentation, index) => {
+        //Random index is defined to have a different key
+        const line = {
+            label: '',
+            description: '',
+            value: '',
+            type: '',
+            indentation: parentIndentation + 1,
+            isURL: false,
+            isEditable: true,
+            isDeletable: true,
+            parent: parentValue,
+            isExtObj: false,
+            index: Math.floor(Math.random() * 30000),
+            isEmbeddedObj: false,
+            isAddedLine: true
+        };
+        let innerData = [...data]
+        innerData.splice(index + 1, 0, line)
+        setData(innerData)
+    }
 
+    const resetIndexOnLabel = (line) => {
+        let filteredData = data.filter((item) => item.parent == line.parent && item.label == line.label)
+        if (filteredData.length > 1) {
+            const updateChangeMap = { ...changeMap };
+            filteredData.forEach((item, index) => {
+                let oldIndexChange = item.parent + '_' + item.label + '_' + item.index
+                item.index = index + 1
+                let newIndexChange = item.parent + '_' + item.label + '_' + item.index
+                if (oldIndexChange != newIndexChange && updateChangeMap[oldIndexChange] != null) {
+                    updateChangeMap[newIndexChange] = updateChangeMap[oldIndexChange]
+                    delete updateChangeMap[oldIndexChange]
+                }
+            });
+            setChangeMap(updateChangeMap)
+        }
+    }
 
-    // TODO Lift Data Handling to List Level
+    const deleteLine = (line) => {
+        let innerData = [...data]
+        const index = data.indexOf(line);
+        innerData.splice(index, 1)
+        setData(innerData)
+    }
 
     return (
         <>
-            {/* <div className={`ml-4 overflow-y-scroll  ${expansionState == 1 ? "" : "h-[128px]"} ${expansionState == 2 ? "" : "h-[78px]"} `} > */}
             <div className={`ml-4 overflow-y-scroll
             ${expansionState == 1 && "max-h-[200px]"} 
             ${expansionState == 2 && "max-h-[300px]"} `}
             >
                 {data && data.map((data, index) => {
                     return (
-                        <div key={index} className="block w-[319px] overflow-hidden">
+                        <div key={data.parent + data.label + data.index} className="block w-[319px]">
                             <PropLine
-                                index={index}
+                                index={data.parent + data.label + data.index}
                                 id={id}
                                 data={data}
                                 inEdit={inEdit}
-                                changeList={changeList}
-                                setChangeList={setChangeList}
+                                changeMap={changeMap}
+                                setChangeMap={setChangeMap}
+                                addProperty={addProperty}
+                                order={index}
+                                resetIndexOnLabel={resetIndexOnLabel}
+                                deleteLine={deleteLine}
                             />
                         </div>
                     )
                 })}
+                {inEdit != 0 && <div className="flex grow justify-end mt-2"><button
+                    onClick={() => addProperty(id, -1, data.length)}
+                    className={`ml-1  border-slate-400 rounded-lg border-[1px]`}>
+                    <svg className="flex-initial fill-slate-800 m-1" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M452.116-216.462v-235.962H216.154v-55.96h235.962v-235.962h55.96v235.962h235.962v55.96H508.076v235.962h-55.96Z" /></svg>
+                </button></div>}
             </div>
         </>
     )
