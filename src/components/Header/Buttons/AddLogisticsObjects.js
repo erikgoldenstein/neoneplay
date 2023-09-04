@@ -53,8 +53,8 @@ const AddLogisticsObjects = () => {
             <div className='has-tooltip '>
                 <span className='tooltip rounded shadow-lg p-1 bg-slate-200 dark:bg-slate-600 text-slate-600 dark:text-slate-200 mt-12 -ml-10  duration-200 transition-colors' >Add Logistics Object</span>
                 <button onClick={() => { setShowPopup(!showPopup) }}
-                    className="p-2 bg-violet-400 hover:bg-violet-600 active:bg-violet-800 dark:bg-violet-500 dark:hover:bg-violet-600 dark:active:bg-violet-800 rounded-full mx-1 my-auto text-white  duration-200 transition-all">
-                    <svg className="fill-white" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 96 960 960" width="24"><path d="M452.116-216.462v-235.962H216.154v-55.96h235.962v-235.962h55.96v235.962h235.962v55.96H508.076v235.962h-55.96Z" /></svg>
+                    className="rotate-45 p-2 bg-violet-400 hover:bg-violet-600 active:bg-violet-800 dark:bg-violet-500 dark:hover:bg-violet-600 dark:active:bg-violet-800 rounded-full mx-1 my-auto text-white  duration-200 transition-all">
+                        <svg className="fill-white" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m249-207-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z" /></svg>
                 </button>
             </div>
             {showPopup &&
