@@ -259,7 +259,7 @@ const PropList = ({ id, cardData, expansionState, links, setLinks, inEdit, setIn
             isDeletable: true,
             parent: parentValue,
             isExtObj: false,
-            index: Math.floor(Math.random() * 30000),
+            index: 0,
             isEmbeddedObj: false,
             isAddedLine: true
         };

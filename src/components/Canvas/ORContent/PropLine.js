@@ -20,6 +20,7 @@ const PropLine = ({ index, id, data, inEdit, changeMap, setChangeMap, addPropert
 
     useEffect(() => {
         if (!inEdit) {
+            console.log('dav test')
             if (data.value != changedValue) {
                 setChangedValue(data.value);
             }
@@ -28,6 +29,7 @@ const PropLine = ({ index, id, data, inEdit, changeMap, setChangeMap, addPropert
     }, [inEdit])
 
     const changeMapUpdate = (value) => {
+        setChangedValue(value)
         if (inEdit) {
             const updateChangeMap = { ...changeMap };
             if (data.value != value) {
@@ -44,7 +46,6 @@ const PropLine = ({ index, id, data, inEdit, changeMap, setChangeMap, addPropert
                 delete updateChangeMap[data.parent + '_' + data.label + '_' + data.index]
             }
             setChangeMap(updateChangeMap)
-            console.log(updateChangeMap)
         }
 
     }
@@ -245,25 +246,13 @@ const PropLine = ({ index, id, data, inEdit, changeMap, setChangeMap, addPropert
 
                 {(inEdit != 0 && data.isAddedLine && data.label != '') &&
                     <>
-
-                        {(data.type.includes('cargo')) &&
-                            <>
-                                {(data.type.includes('cargo')) && iri_description[':' + data.type.split('#').pop()].Type == "Class" &&
-                                    <input className='w-[42%] mx-auto  text-xs border-b-[1px] border-slate-400 rounded-md p-[2px] active:outline-none focus:outline-none'
-                                        defaultValue={changedValue} onBlur={e => changeMapUpdate(e.target.value)}
-                                        type='text' name='' id='' />
-                                }
-                                {(iri_description[':' + data.type.split('#').pop()].Type == "EmbeddedObject") &&
-                                    <span className='w-[42%] mx-auto  text-xs mt-1'>Create Object</span>
-                                }
-                            </>
+                        {(iri_description[':' + data.label].Type == "DataProperty" || iri_description[':' + data.type.split('#').pop()].Type != "EmbeddedObject") &&
+                            <input className='w-[42%] mx-auto  text-xs border-b-[1px] border-slate-400 rounded-md p-[2px] active:outline-none focus:outline-none'
+                                defaultValue={changedValue} onBlur={e => changeMapUpdate(e.target.value)}
+                                type='text' name='' id='' />
                         }
-                        {(!data.type.includes('cargo')) &&
-                            <>
-                                <input className='w-[42%] mx-auto  text-xs border-b-[1px] border-slate-400 rounded-md p-[2px] active:outline-none focus:outline-none'
-                                    defaultValue={changedValue} onBlur={e => changeMapUpdate(e.target.value)}
-                                    type='text' name='' id='' />
-                            </>
+                        {(iri_description[':' + data.type.split('#').pop()] && iri_description[':' + data.type.split('#').pop()].Type == "EmbeddedObject") &&
+                            <span className='w-[42%] mx-auto  text-xs mt-1'>Create Object</span>
                         }
                         <button onClick={deleteLineAndChange}
                             className='p-[3px] mt-0.5 border-[1px] border-red-300 rounded-lg mr-0'>

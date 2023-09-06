@@ -156,8 +156,6 @@ const LOCard = ({ id, data, isConnectable }) => {
         let old_link = {};
         const offset = (-1 * ((links.length / 2) - 0.5)) * 350
         links.map((link, index) => {
-            console.log("test")
-            console.log(link.loLocation)
             if (RFI.getNode(link.loLocation) == null) {
                 RFI.addNodes({
                     id: link.loLocation,
@@ -218,7 +216,6 @@ const LOCard = ({ id, data, isConnectable }) => {
     return (
         <div className=" rounded-lg bg-white/[0.9] drop-shadow-lg shadow-neutral-750 nowheel">
 
-            {/* <Handle type="none" position={Position.Top} isConnectable={isConnectable}></Handle> */}
             <div id="node-header" className={`flex rounded-t-lg w-[350px] h-[110px] border-b-[1px] border-gray-200  ${is404 ? "bg-red-100" : "bg-slate-50/[0.9]"}  duration-500 rounded-lg ${expansionState > expansion.Closed ? "" : ""}`}>
                 <div id="header-left-col" className='block relative w-full'>
                     <div note="colored bar"
@@ -405,14 +402,11 @@ const LOCard = ({ id, data, isConnectable }) => {
                 </div>
 
             </div>
-
-
             <Handle
                 className='hidden'
                 type="source"
-                position={Position.Bottom}
+                position={Position.Top}
                 id="a"
-                // style={handleStyle}
                 isConnectable={isConnectable}
             />
             <Handle
@@ -420,7 +414,6 @@ const LOCard = ({ id, data, isConnectable }) => {
                 type="target"
                 position={Position.Bottom}
                 id="a"
-                // style={handleStyle}
                 isConnectable={isConnectable}
             />
         </div >

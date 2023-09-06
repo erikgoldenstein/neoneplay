@@ -16,7 +16,6 @@ const AddLogisticsObjects = () => {
 
 
     useEffect(() => {
-        console.log(servers)
         setLOType("")
         setServer("")
         setCreatedLO("")
