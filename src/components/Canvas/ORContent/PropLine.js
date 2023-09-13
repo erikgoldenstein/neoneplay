@@ -30,9 +30,12 @@ const PropLine = ({ index, id, data, inEdit, changeMap, setChangeMap, addPropert
 
     const changeMapUpdate = (value) => {
         setChangedValue(value)
+        if( data.isAddedLine) {
+            data.value = value
+        }
         if (inEdit) {
             const updateChangeMap = { ...changeMap };
-            if (data.value != value) {
+            if (data.value != value || data.isAddedLine) {
                 const diff = {
                     op: (data.isAddedLine ? operation.Add : operation.Change),
                     label: data.label,
@@ -233,14 +236,9 @@ const PropLine = ({ index, id, data, inEdit, changeMap, setChangeMap, addPropert
                             <Select options={options}
                                 isClearable={true}
                                 isSearchable={true}
-                                onChange={(item) => { if (item != null) { data.label = item.label } }}
+                                onChange={(item) => { if (item != null) { data.label = item.label; setNewlineLabel() } }}
                                 styles={selectStyles} />
                         </div>
-                        <button
-                            onClick={setNewlineLabel}
-                            className='p-[3px] border-[1px] border-slate-400 rounded-lg ml-1 mr-2'>
-                            <svg xmlns="http://www.w3.org/2000/svg" height="14" viewBox="0 -960 960 960" width="24"><path d="m382.808-258.693-207.73-207.73 40.037-40.038 167.693 167.885 362.269-362.269 39.845 40.037-402.114 402.115Z" /></svg>
-                        </button>
                     </div>
                 }
 

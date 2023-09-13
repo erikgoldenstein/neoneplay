@@ -171,18 +171,22 @@ const PropList = ({ id, cardData, expansionState, links, setLinks, inEdit, setIn
                 parent: parent,
                 isExtObj: false,
                 index: index,
-                isEmbeddedObj: false
+                isEmbeddedObj: false,
+                isValid : true
             };
             let iri_prefixed = property.split("#").pop()
             let object = iri_description[":" + iri_prefixed]
             if (!object) {
                 line.label = <span className='text-red-500'>{iri_prefixed}</span>
+                line.label = iri_prefixed
                 line.description = "Invalid One Record Property"
                 line.type = data["@type"]
+                line.isValid = false
             } else {
                 line.label = object.Label;
                 line.description = object.Description
                 line.type = object.TypeIRI
+                line.isValid = true
             }
 
             if (typeof data === 'object' && data !== null && !Array.isArray(data)) {
@@ -261,7 +265,8 @@ const PropList = ({ id, cardData, expansionState, links, setLinks, inEdit, setIn
             isExtObj: false,
             index: 0,
             isEmbeddedObj: false,
-            isAddedLine: true
+            isAddedLine: true,
+            isValid : true
         };
         let innerData = [...data]
         innerData.splice(index + 1, 0, line)
@@ -302,7 +307,6 @@ const PropList = ({ id, cardData, expansionState, links, setLinks, inEdit, setIn
                     return (
                         <div key={data.parent + data.label + data.index} className="block w-[319px]">
                             <PropLine
-                                index={data.parent + data.label + data.index}
                                 id={id}
                                 data={data}
                                 inEdit={inEdit}

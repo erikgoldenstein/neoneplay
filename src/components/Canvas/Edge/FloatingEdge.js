@@ -38,7 +38,7 @@ function FloatingEdge({ id, source, target, markerEnd, style, label }) {
                 <div
                     style={{
                         position: 'absolute',
-                        transform: `translate(${labelX}px, ${labelY -550}px)` //750 is a magic number
+                        transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)` 
                     }}
                     className="nodrag nopan
                     p-1 bg-slate-200/50 rounded-md text-bold text-xs"
