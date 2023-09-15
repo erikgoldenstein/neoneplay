@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react';
-import { useStore, getBezierPath, EdgeLabelRenderer } from 'reactflow';
+import { useStore, getBezierPath, EdgeText } from 'reactflow';
 import { getEdgeParams } from './utils.js';
 
 
@@ -34,18 +34,14 @@ function FloatingEdge({ id, source, target, markerEnd, style, label }) {
                 markerEnd={markerEnd}
                 style={{ ...style, strokeWidth: 3 }}
             />
-            <EdgeLabelRenderer>
-                <div
-                    style={{
-                        position: 'absolute',
-                        transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)` 
-                    }}
-                    className="nodrag nopan
-                    p-1 bg-slate-200/50 rounded-md text-bold text-xs"
-                >
-                    {label}
-                </div>
-            </EdgeLabelRenderer>
+            <EdgeText
+                x={labelX}
+                y={labelY}
+                label={label}
+                labelBgPadding= {[8, 4]}
+                labelBgBorderRadius = {4}
+                labelBgStyle = {{ fill: '#FFCE33', color: '#fff', fillOpacity: 0.7 }}
+            />
         </>
     );
 }

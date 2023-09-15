@@ -20,7 +20,6 @@ const PropLine = ({ index, id, data, inEdit, changeMap, setChangeMap, addPropert
 
     useEffect(() => {
         if (!inEdit) {
-            console.log('dav test')
             if (data.value != changedValue) {
                 setChangedValue(data.value);
             }

@@ -6,19 +6,19 @@ import moment from 'moment';
 import PropList from './ORContent/PropList';
 import useInternalStore from '@/store';
 import { expansion } from '@/helpers/Enums';
-import { Input } from 'postcss';
+
 
 const IconReload = () => {
-  return (
-    <svg
-      viewBox="0 0 20 20"
-      fill="currentColor"
-      height="1em"
-      width="1em"
-    >
-      <path d="M14.66 15.66A8 8 0 1117 10h-2a6 6 0 10-1.76 4.24l1.42 1.42zM12 10h8l-4 4-4-4z" />
-    </svg>
-  );
+    return (
+        <svg
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            height="1em"
+            width="1em"
+        >
+            <path d="M14.66 15.66A8 8 0 1117 10h-2a6 6 0 10-1.76 4.24l1.42 1.42zM12 10h8l-4 4-4-4z" />
+        </svg>
+    );
 }
 
 
@@ -32,7 +32,7 @@ const getTypeString = (loType) => {
 }
 
 
-const LOCard = ({ id, data, isConnectable }) => {
+const LOCard = ({ id, data, isConnectable, setShowEventPanel }) => {
 
     const [expansionState, setExpansionState] = useState(expansion.Closed)
     const [cardData, setCardData] = useState(null)
@@ -152,7 +152,7 @@ const LOCard = ({ id, data, isConnectable }) => {
     }
 
 
-    const addLinks = () => {
+    const addLinks = () => {        
         let old_link = {};
         const offset = (-1 * ((links.length / 2) - 0.5)) * 350
         links.map((link, index) => {
@@ -180,7 +180,6 @@ const LOCard = ({ id, data, isConnectable }) => {
                 });
             }
             old_link = link
-
         })
     }
 
@@ -317,7 +316,7 @@ const LOCard = ({ id, data, isConnectable }) => {
 
                     <button className="absolute right-[-15px] mt-[52px]
                 hover:bg-neutral-100 active:bg-neutral-200 transition-all duratio-300
-                bg-white/[0.9] rounded-full p-1 drop-shadow-md" onClick={() => { setRefetch(true) }}>                            
+                bg-white/[0.9] rounded-full p-1 drop-shadow-md" onClick={() => { setRefetch(true) }}>
                         <IconReload />
                     </button>
 
@@ -356,18 +355,28 @@ const LOCard = ({ id, data, isConnectable }) => {
 
                     <div className="flex">
                         {cardData && cardData.headers['revision'] == cardData.headers['latest-revision'] &&
-                            <button
-                                onClick={() => { if (inEdit == 0) { setInEdit(1) } else if (inEdit == 1) { setInEdit(2) } }}
-                                className={` flex-initial  top-0 border-slate-400 rounded-lg ${inEdit ? "bg-blue-400" : "border-[1px]"}`}>
-                                {!inEdit && <svg className='fill-slate-800 m-2 left-[-1px] top-[-1px]' xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 -960 960 960" width="16"><path d="M180-180h44l443-443-44-44-443 443v44Zm614-486L666-794l42-42q17-17 42-17t42 17l44 44q17 17 17 42t-17 42l-42 42Zm-42 42L248-120H120v-128l504-504 128 128Zm-107-21-22-22 44 44-22-22Z" /></svg>}
-
-                                {inEdit != 0 && <svg className='fill-slate-50 m-1' xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m382.808-258.693-207.73-207.73 40.037-40.038 167.693 167.885 362.269-362.269 39.845 40.037-402.114 402.115Z" /></svg>}
-                            </button>
+                            <>
+                                {!inEdit &&
+                                    <button
+                                        onClick={() => { setShowEventPanel(true) }}
+                                        className={` flex-initial  top-0 border-slate-400 rounded-lg border-[1px] mr-1`}>
+                                        <svg className='fill-slate-800 m-2 left-[-1px] top-[-1px]' xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 0 960 960" width="16">
+                                            <path xmlns="http://www.w3.org/2000/svg" d="M39.384615 374.153846c0 114.215385 45.292308 222.523077 126.03077 303.261539 17.723077 17.723077 43.323077 17.723077 61.046153 0 17.723077-17.723077 17.723077-45.292308 0-63.015385-63.015385-63.015385-98.461538-149.661538-98.461538-240.246154s35.446154-177.230769 98.461538-240.246154c17.723077-17.723077 17.723077-45.292308 0-63.015384-17.723077-17.723077-43.323077-17.723077-61.046153 0C84.676923 151.630769 39.384615 259.938462 39.384615 374.153846z m250.092308 177.230769c17.723077 17.723077 45.292308 17.723077 63.015385 0 17.723077-17.723077 17.723077-45.292308 0-63.015384-29.538462-29.538462-47.261538-70.892308-47.261539-114.215385 0-43.323077 15.753846-82.707692 47.261539-114.215384 17.723077-17.723077 17.723077-45.292308 0-63.015385-17.723077-17.723077-45.292308-17.723077-63.015385 0-47.261538 47.261538-72.861538 110.276923-72.861538 177.230769 0 66.953846 25.6 129.969231 72.861538 177.230769zM856.615385 70.892308c-17.723077-17.723077-45.292308-17.723077-63.015385 0-17.723077 17.723077-17.723077 45.292308 0 63.015384 63.015385 63.015385 100.430769 149.661538 100.430769 240.246154s-35.446154 177.230769-100.430769 240.246154c-17.723077 17.723077-17.723077 45.292308 0 63.015385 17.723077 17.723077 45.292308 17.723077 63.015385 0 80.738462-80.738462 126.030769-189.046154 126.030769-303.261539 0-114.215385-45.292308-222.523077-126.030769-303.261538zM805.415385 374.153846c-1.969231-66.953846-27.569231-129.969231-74.83077-177.230769-17.723077-17.723077-43.323077-17.723077-61.046153 0-17.723077 17.723077-17.723077 45.292308 0 63.015385 29.538462 31.507692 47.261538 70.892308 47.261538 114.215384 0 43.323077-17.723077 84.676923-47.261538 114.215385-17.723077 17.723077-17.723077 45.292308 0 63.015384 17.723077 17.723077 43.323077 17.723077 61.046153 0 47.261538-47.261538 72.861538-110.276923 72.861539-177.230769zM466.707692 480.492308c-43.323077-17.723077-70.892308-59.076923-70.892307-108.307693 0-63.015385 51.2-114.215385 114.215384-114.215384 63.015385 0 116.184615 51.2 116.184616 114.215384 0 49.230769-29.538462 88.615385-70.892308 106.338462v464.738461c0 11.815385-11.815385 23.630769-23.630769 21.661539h-43.323077c-11.815385 0-21.661538-9.846154-21.661539-21.661539V480.492308z" />
+                                        </svg>
+                                    </button>
+                                }
+                                <button
+                                    onClick={() => { if (inEdit == 0) { setInEdit(1) } else if (inEdit == 1) { setInEdit(2) } }}
+                                    className={` flex-initial  top-0 border-slate-400 rounded-lg ${inEdit ? "bg-blue-400" : "border-[1px]"}`}>
+                                    {!inEdit && <svg className='fill-slate-800 m-2 left-[-1px] top-[-1px]' xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 -960 960 960" width="16"><path d="M180-180h44l443-443-44-44-443 443v44Zm614-486L666-794l42-42q17-17 42-17t42 17l44 44q17 17 17 42t-17 42l-42 42Zm-42 42L248-120H120v-128l504-504 128 128Zm-107-21-22-22 44 44-22-22Z" /></svg>}
+                                    {inEdit != 0 && <svg className='fill-slate-50 m-1' xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m382.808-258.693-207.73-207.73 40.037-40.038 167.693 167.885 362.269-362.269 39.845 40.037-402.114 402.115Z" /></svg>}
+                                </button>
+                            </>
                         }
                         {cardData && cardData.headers['revision'] != cardData.headers['latest-revision'] &&
                             <div className='p-2 bg-red-500 rounded-lg text-white text-xs top-0 '>
                                 <span className='inline'>
-                                   ! Older Revision
+                                    ! Older Revision
                                 </span>
                             </div>
                         }

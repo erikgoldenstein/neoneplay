@@ -6,6 +6,7 @@ import useRFStore from '@/storeRF';
 import useInternalStore from '@/store';
 import FloatingEdge from './Edge/FloatingEdge';
 import FloatingConnectionLine from './Edge/FloatingConnectionLine';
+import EventPanel from './Events/EventPanel';
 
 
 const Canvas = () => {
@@ -18,7 +19,6 @@ const Canvas = () => {
 
     const nodeTypes = useMemo(() => ({ LO: LOCard }), []);
     const edgeTypes = useMemo(() => ({ floating: FloatingEdge }), [])
-
 
     const onPaneClick = (event) => {
         if (addNodeFlag) {
@@ -56,7 +56,6 @@ const Canvas = () => {
                 connectionLineComponent={FloatingConnectionLine}
                 minZoom={0.25}
                 onPaneClick={onPaneClick}
-
                 ref={rfCanvasRef}
                 style={{ cursor: (addNodeFlag ? "cell" : "") }}
             >
@@ -65,6 +64,9 @@ const Canvas = () => {
 
                 <Background color='black' variant='dots' />
             </ReactFlow>
+            <EventPanel
+                selectedObject=''
+            />
         </div>
     );
 };
