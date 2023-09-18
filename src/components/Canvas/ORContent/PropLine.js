@@ -181,6 +181,7 @@ const PropLine = ({ index, id, data, inEdit, changeMap, setChangeMap, addPropert
                                     }
                                     if (RFI.getEdge(id + "->" + data.value) == null) {
                                         RFI.addEdges({
+                                            label: data.label,
                                             id: (id + "->" + data.value),
                                             target: data.value,
                                             source: id,

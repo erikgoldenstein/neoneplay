@@ -20,6 +20,8 @@ const Canvas = () => {
     const nodeTypes = useMemo(() => ({ LO: LOCard }), []);
     const edgeTypes = useMemo(() => ({ floating: FloatingEdge }), [])
 
+    const [selectedObjectEvent,setSelectedObjectEvent] = useState('')
+ 
     const onPaneClick = (event) => {
         if (addNodeFlag) {
             setAddNodeFlag(false)
@@ -42,6 +44,12 @@ const Canvas = () => {
         }
     }
 
+    const test = (event, node) => {
+        if(event.target.id.includes('logisticEvent')) {
+            setSelectedObjectEvent(node.data.uri)
+        }
+    }
+
 
     return (
         <div className="absolute left-0 top-0 w-full h-full z-0 "
@@ -58,6 +66,7 @@ const Canvas = () => {
                 onPaneClick={onPaneClick}
                 ref={rfCanvasRef}
                 style={{ cursor: (addNodeFlag ? "cell" : "") }}
+                onNodeClick={test}
             >
                 <MiniMap />
                 <Controls />
@@ -65,7 +74,8 @@ const Canvas = () => {
                 <Background color='black' variant='dots' />
             </ReactFlow>
             <EventPanel
-                selectedObject=''
+                selectedObject={selectedObjectEvent}
+                setSelectedObject={setSelectedObjectEvent}
             />
         </div>
     );
