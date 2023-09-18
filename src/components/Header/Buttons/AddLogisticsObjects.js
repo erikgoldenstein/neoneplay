@@ -22,7 +22,6 @@ const AddLogisticsObjects = () => {
     }, [showPopup])
 
     const createLO = async () => {
-        console.log(server)
         let body_obj = {
             "@context": {
                 "cargo": "https://onerecord.iata.org/ns/cargo#",

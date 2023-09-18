@@ -14,6 +14,7 @@ function EventPanel({ selectedObject, setSelectedObject }) {
 
     useEffect(() => {
         if (selectedObject && selectedObject != '') {
+            setListLE([])
             readLE(selectedObject)
             setShowEventPanel(true);
         }
@@ -44,13 +45,19 @@ function EventPanel({ selectedObject, setSelectedObject }) {
         let res = await prom;
         let body = await res.json()
         if (res.status == 200) {
-            let eventList = body['@graph']
+            let eventList = []
+            if (body.hasOwnProperty['@graph']){
+                eventList = body['@graph']
+            } else {
+                eventList.push(body)
+            }
             let cargo = 'https://onerecord.iata.org/ns/cargo#'
-            eventList.sort(function(a,b){
-                a[cargo + 'eventDate']['@value']
-                return new Date(b[cargo + 'eventDate']['@value']) - new Date(a[cargo + 'eventDate']['@value']);
-              })
-            eventList.sort()
+            if (eventList.length > 1) {
+                eventList.sort(function (a, b) {
+                    a[cargo + 'eventDate']['@value']
+                    return new Date(b[cargo + 'eventDate']['@value']) - new Date(a[cargo + 'eventDate']['@value']);
+                })
+            }
             let list = []
             if (eventList && eventList.length > 0) {
                 eventList.forEach((event) => {
@@ -58,7 +65,7 @@ function EventPanel({ selectedObject, setSelectedObject }) {
                         <tr>
                             <td className="border border-slate-600 text-center">{event[cargo + 'eventName']}</td>
                             <td className="border border-slate-600 text-center">{event[cargo + 'eventCode']}</td>
-                            <td className="border border-slate-600 text-center">{event[cargo + 'eventDate']['@value'].replace('T', ' ').replace('Z','')}</td>
+                            <td className="border border-slate-600 text-center">{event[cargo + 'eventDate']['@value'].replace('T', ' ').replace('Z', '')}</td>
                             <td className="border border-slate-600 text-center">{event[cargo + 'eventTimeType']}</td>
                         </tr>
                     )
@@ -120,21 +127,26 @@ function EventPanel({ selectedObject, setSelectedObject }) {
                         </button>
                         <div className="block bg-slate-200 p-2  m-2 ml-0 w-full rounded-3xl ">
                             <span className="text-xl font-medium pl-1 pt-2">Logistics Events</span>
-                            <div className="rounded-b-xl bg-slate-300 mt-1">
-                        <table className="table-fixed w-[100%]">
-                            <thead>
-                                <tr>
-                                    <th className="border border-slate-600 ...">Event Name</th>
-                                    <th className="border border-slate-600 ...">Event Code</th>
-                                    <th className="border border-slate-600 ...">Event Date</th>
-                                    <th className="border border-slate-600 ...">Event Time Type</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {listLE}
-                            </tbody>
-                        </table>
-                        </div></div>
+                            {listLE.length > 0 ?
+                                <div className="rounded-b-xl bg-slate-300 mt-1">
+                                    <table className="table-fixed w-[100%]">
+                                        <thead>
+                                            <tr>
+                                                <th className="border border-slate-600 ...">Event Name</th>
+                                                <th className="border border-slate-600 ...">Event Code</th>
+                                                <th className="border border-slate-600 ...">Event Date</th>
+                                                <th className="border border-slate-600 ...">Event Time Type</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {listLE}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                :
+                                <span> No Events for this Logistics Object</span>
+                            }
+                        </div>
                         <div className="block bg-slate-200 p-2  m-2 ml-0 w-full rounded-3xl ">
                             <span className="text-xl font-medium pl-1 ">Create New Logistics Event</span>
                             <div className="rounded-b-xl bg-slate-300 p-2 mt-1">
@@ -152,7 +164,7 @@ function EventPanel({ selectedObject, setSelectedObject }) {
                                 </div>
                                 <button className=" bg-violet-300 text-white font-light p-1 rounded-full w-full hover:bg-violet-400 active:bg-violet-500 transition-color duration-200"
                                     onClick={createLE}>
-                                        Add Event
+                                    Add Event
                                 </button>
                             </div>
                         </div>
