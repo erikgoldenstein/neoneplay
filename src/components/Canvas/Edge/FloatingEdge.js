@@ -40,7 +40,7 @@ function FloatingEdge({ id, source, target, markerEnd, style, label }) {
                 label={label}
                 labelBgPadding= {[8, 4]}
                 labelBgBorderRadius = {4}
-                labelBgStyle = {{ fill: '#FFCE33', color: '#fff', fillOpacity: 0.7 }}
+                labelBgStyle = {{ fill: '#A9A9A9', color: '#fff', fillOpacity: 0.4 }}
             />
         </>
     );
