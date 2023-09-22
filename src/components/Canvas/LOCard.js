@@ -230,7 +230,7 @@ const LOCard = ({ id, data, isConnectable }) => {
                             </span>
                             <span className='font-semibold text-2xl table-cell align-middle mr-auto'>
                                 <div className="w-[160px] overflow-hidden">
-                                    {cardData && getTypeString(cardData.body['@type'])}
+                                    {cardData && getTypeString(cardData.headers['type'])}
                                 </div>
                                 {(!cardData && !is404) &&
                                     <div role="status" className='absolute top-[30px] left-[150px] scale-150'>
