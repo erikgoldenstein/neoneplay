@@ -97,7 +97,7 @@ const LOCard = ({ id, data, isConnectable }) => {
     useEffect(() => {
         if (refetch || firstOpen) {
             const host = data.uri.split("//").at(-1)
-            servers.map((server, index) => {
+            servers.map((server) => {
                 if (!host.indexOf(server.host)) {
                     setColor(server.color)
                     setToken(server.token)

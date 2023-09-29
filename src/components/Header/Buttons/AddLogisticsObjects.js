@@ -5,6 +5,7 @@ import useInternalStore from '@/store';
 
 const AddLogisticsObjects = () => {
     const [showPopup, setShowPopup] = useState(false)
+    const { setAddNodeFlag, setSearchbarValue } = useInternalStore()
 
     const [LOType, setLOType] = useState("");
     const [server, setServer] = useState("");
@@ -12,7 +13,7 @@ const AddLogisticsObjects = () => {
     const { servers } = useInternalStore()
 
     const LOOptions = Object.values(iri_description).filter((item) => item.Type == 'Class').map((item) => { return { label: item.Label, value: item.Label } })
-    const serverOptions = servers.map((item) => { return { label: item.org_name, value: item.host} })
+    const serverOptions = servers.map((item) => { return { label: item.org_name, value: item.host } })
 
 
     useEffect(() => {
@@ -28,7 +29,7 @@ const AddLogisticsObjects = () => {
             },
             "@type": "cargo:" + LOType.value
         }
-        let prom = fetch('http://'+server.value+"/logistics-objects", {
+        let prom = fetch('http://' + server.value + "/logistics-objects", {
             method: "POST",
             headers: {
                 "Content-Type": "application/ld+json",
@@ -42,6 +43,8 @@ const AddLogisticsObjects = () => {
             let header_obj = {};
             res.headers.forEach((val, key) => { header_obj[key] = val })
             setCreatedLO(header_obj['location'])
+            setSearchbarValue(header_obj['location'])
+            setAddNodeFlag(true)
         }
 
     }
@@ -52,7 +55,7 @@ const AddLogisticsObjects = () => {
                 <span className='tooltip rounded shadow-lg p-1 bg-slate-200 dark:bg-slate-600 text-slate-600 dark:text-slate-200 mt-12 -ml-10  duration-200 transition-colors' >Add Logistics Object</span>
                 <button onClick={() => { setShowPopup(!showPopup) }}
                     className="rotate-45 p-2 bg-violet-400 hover:bg-violet-600 active:bg-violet-800 dark:bg-violet-500 dark:hover:bg-violet-600 dark:active:bg-violet-800 rounded-full mx-1 my-auto text-white  duration-200 transition-all">
-                        <svg className="fill-white" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m249-207-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z" /></svg>
+                    <svg className="fill-white" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m249-207-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z" /></svg>
                 </button>
             </div>
             {showPopup &&
@@ -86,8 +89,13 @@ const AddLogisticsObjects = () => {
                         </div>
                         {createdLO != '' &&
                             <>
-                                <span>Created LO</span>
-                                <div><span>{createdLO}</span></div>
+                                <span>Logistics Object Created Successfully</span>
+                                <div className="mt-2"><span>{createdLO}</span></div>
+                                <div className="flex justify-center">
+                                <button onClick={() => { setShowPopup(!showPopup) }} className="w-[30%] mt-2 p-2 bg-violet-400 hover:bg-violet-500 active:bg-violet-600 transition-color duration-200 text-white rounded-full">
+                                    Close Window
+                                </button>
+                                </div>
                             </>
                         }
                     </div>
