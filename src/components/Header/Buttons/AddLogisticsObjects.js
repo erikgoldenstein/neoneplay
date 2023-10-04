@@ -29,7 +29,7 @@ const AddLogisticsObjects = () => {
             },
             "@type": "cargo:" + LOType.value
         }
-        let prom = fetch('https://' + server.value + "/logistics-objects", {
+        let prom = fetch('http://' + server.value + "/logistics-objects", {
             method: "POST",
             headers: {
                 "Content-Type": "application/ld+json",
