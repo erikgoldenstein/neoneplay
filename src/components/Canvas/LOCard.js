@@ -24,11 +24,10 @@ const IconReload = () => {
 
 
 const getTypeString = (loType) => {
-    if (Array.isArray(loType)) {
-        return loType.at(-1).split("#").at(-1)
-    } else {
+    if (loType.includes('#')) {
         return loType.split("#").at(-1)
     }
+    return ''
 }
 
 
