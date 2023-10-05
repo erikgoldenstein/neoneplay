@@ -24,7 +24,7 @@ const IconReload = () => {
 
 
 const getTypeString = (loType) => {
-    if (loType.includes('#')) {
+    if (loType && loType.includes('#')) {
         return loType.split("#").at(-1)
     }
     return ''
