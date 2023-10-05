@@ -14,9 +14,9 @@ const Settings = () => {
     useEffect(() => {
         let globalToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6Ik1RZFRjMENlbHRlS0N2bkpVQm5RSWd2ckZySUVEbWtDM0FJVTJPUUd1VHMiLCJ0eXAiOiJKV1QifQ.eyJsb2dpc3RpY3NBZ2VudFVSSSI6Imh0dHBzOi8vZnJhLTEub25lLXJlY29yZC5saGluZC5kZXYvbG9naXN0aWNzLW9iamVjdHMvZTA4YTg4ZDkiLCJ0aWQiOiJiOGE3NDZhNi1jNTQwLTQzZjQtOTJmMy02MTUwYWQwNTcyMTUiLCJhenBhY3IiOiIxIiwic3ViIjoiNDY2NjNjMDYtN2M2OC00NzYxLWE0ZjUtZjAzZTFhYzdmZWRkIiwiYXVkIjoiYWRmNGZhNjQtMzMyMy00NjhmLWFkODYtYzA0NzYxNDliY2IyIiwib2lkIjoiNDY2NjNjMDYtN2M2OC00NzYxLWE0ZjUtZjAzZTFhYzdmZWRkIiwidmVyIjoiMi4wIiwiYXpwIjoiYWRmNGZhNjQtMzMyMy00NjhmLWFkODYtYzA0NzYxNDliY2IyIiwiaWF0IjoxNjg3Njc4MTk0LCJleHAiOjE2ODc2ODE3OTQsImlzcyI6Imh0dHBzOi8vYXV0aC5vbmUtcmVjb3JkLmxoaW5kLmRldi9iOGE3NDZhNi1jNTQwLTQzZjQtOTJmMy02MTUwYWQwNTcyMTUvdjIuMC8iLCJuYmYiOjE2ODc2NzgxOTR9.fqDZRFM31T1svmHjEcJGosmxSSlDrndCgapc9W21j2FV2zMuzirSPa-m0IqZZhyPs8NfN1fCiRl-j41MPQrLs01gn5IWB8cXQx1fYB7ktLAsGMvpt2HhfOoHczLz95TZlWEneU5wtpdtg9OoTeIiZ25e2BaE2mU8oVaePeEf5b2BeOPcRdQXzfVL6SHC7upHlIjBS-hH9Bd4OA6-vbhY64BiQIhQt-kXt0qBga2j8ahv9qcGSwWhUEUuGEQFs2qoZR8RRrM4GZaPkS486dzdnUL3dvAJDvYIqfIJINjFG3Rugo6YKaD40PDEK3koLXD_p7u3-_niq6mLIN-FR5qogA"
         cleanServer()
-        //addServer("AIRLINE XYZ", "localhost:8080", globalToken, "#DD7373"); // Airline
-        //addServer("FORWARDER 123", "localhost:8081", globalToken, "#EAD94C") // Forwarder
-        //addServer("SHIPPER ABC", "localhost:8082", globalToken, "#51A3A3") // Shipper
+        addServer("AIRLINE XYZ", "ne-one-airline-1-9d58e17495dd.herokuapp.com", globalToken, "#DD7373"); // Airline
+        addServer("FORWARDER 123", "ne-one-forwarder1-310e540cd5dc.herokuapp.com", globalToken, "#EAD94C") // Forwarder
+        addServer("SHIPPER ABC", "ne-one-shipper1-7e0fd8738aaa.herokuapp.com", globalToken, "#51A3A3") // Shipper
     }, [])
 
     return (
