@@ -46,11 +46,14 @@ function EventPanel({ selectedObject, setSelectedObject }) {
         let body = await res.json()
         if (res.status == 200) {
             let eventList = []
-            if (body.hasOwnProperty['@graph']){
-                eventList = body['@graph']
+            if (body["@graph"]){
+                body["@graph"].forEach((event) => {
+                    eventList.push(event)
+                })
             } else {
                 eventList.push(body)
             }
+            console.log(eventList)
             let cargo = 'https://onerecord.iata.org/ns/cargo#'
             if (eventList.length > 1) {
                 eventList.sort(function (a, b) {
@@ -61,8 +64,9 @@ function EventPanel({ selectedObject, setSelectedObject }) {
             let list = []
             if (eventList && eventList.length > 0) {
                 eventList.forEach((event) => {
+                    let key = Math.random().toString(36).slice(2, 7);
                     list.push(
-                        <tr>
+                        <tr key={key}>
                             <td className="border border-slate-600 text-center">{event[cargo + 'eventName']}</td>
                             <td className="border border-slate-600 text-center">{event[cargo + 'eventCode']}</td>
                             <td className="border border-slate-600 text-center">{event[cargo + 'eventDate']['@value'].replace('T', ' ').replace('Z', '')}</td>
@@ -159,7 +163,7 @@ function EventPanel({ selectedObject, setSelectedObject }) {
                                     <input type="datetime-local" className="rounded-xl px-4 focus:outline-none" value={eventDate} onChange={e => setEventDate(e.target.value)} />
                                     <span>Event Time Type</span>
                                     <input type="text" className="rounded-xl px-4 focus:outline-none" value={eventTimeType} onChange={e => setEventTimeType(e.target.value)} />
-                                    <span>Recording Company</span>
+                                    <span>Recording Company (URI)</span>
                                     <input type="text" className="rounded-xl px-4 focus:outline-none" value={company} onChange={e => setCompany(e.target.value)} />
                                 </div>
                                 <button className=" bg-violet-300 text-white font-light p-1 rounded-full w-full hover:bg-violet-400 active:bg-violet-500 transition-color duration-200"
