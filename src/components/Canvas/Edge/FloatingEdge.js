@@ -36,7 +36,7 @@ function FloatingEdge({ id, source, target, markerEnd, style, label }) {
             />
             <EdgeText
                 x={labelX}
-                y={labelY}
+                y={((sx > tx) ? labelY + 15 : labelY - 15)}
                 label={label}
                 labelBgPadding= {[8, 4]}
                 labelBgBorderRadius = {4}
