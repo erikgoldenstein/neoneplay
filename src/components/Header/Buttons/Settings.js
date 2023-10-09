@@ -12,7 +12,7 @@ const Settings = () => {
     const [color, setColor] = useState("#ffffff")
 
     useEffect(() => {
-        let globalToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6Ik1RZFRjMENlbHRlS0N2bkpVQm5RSWd2ckZySUVEbWtDM0FJVTJPUUd1VHMiLCJ0eXAiOiJKV1QifQ.eyJsb2dpc3RpY3NBZ2VudFVSSSI6Imh0dHBzOi8vZnJhLTEub25lLXJlY29yZC5saGluZC5kZXYvbG9naXN0aWNzLW9iamVjdHMvZTA4YTg4ZDkiLCJ0aWQiOiJiOGE3NDZhNi1jNTQwLTQzZjQtOTJmMy02MTUwYWQwNTcyMTUiLCJhenBhY3IiOiIxIiwic3ViIjoiNDY2NjNjMDYtN2M2OC00NzYxLWE0ZjUtZjAzZTFhYzdmZWRkIiwiYXVkIjoiYWRmNGZhNjQtMzMyMy00NjhmLWFkODYtYzA0NzYxNDliY2IyIiwib2lkIjoiNDY2NjNjMDYtN2M2OC00NzYxLWE0ZjUtZjAzZTFhYzdmZWRkIiwidmVyIjoiMi4wIiwiYXpwIjoiYWRmNGZhNjQtMzMyMy00NjhmLWFkODYtYzA0NzYxNDliY2IyIiwiaWF0IjoxNjg3Njc4MTk0LCJleHAiOjE2ODc2ODE3OTQsImlzcyI6Imh0dHBzOi8vYXV0aC5vbmUtcmVjb3JkLmxoaW5kLmRldi9iOGE3NDZhNi1jNTQwLTQzZjQtOTJmMy02MTUwYWQwNTcyMTUvdjIuMC8iLCJuYmYiOjE2ODc2NzgxOTR9.fqDZRFM31T1svmHjEcJGosmxSSlDrndCgapc9W21j2FV2zMuzirSPa-m0IqZZhyPs8NfN1fCiRl-j41MPQrLs01gn5IWB8cXQx1fYB7ktLAsGMvpt2HhfOoHczLz95TZlWEneU5wtpdtg9OoTeIiZ25e2BaE2mU8oVaePeEf5b2BeOPcRdQXzfVL6SHC7upHlIjBS-hH9Bd4OA6-vbhY64BiQIhQt-kXt0qBga2j8ahv9qcGSwWhUEUuGEQFs2qoZR8RRrM4GZaPkS486dzdnUL3dvAJDvYIqfIJINjFG3Rugo6YKaD40PDEK3koLXD_p7u3-_niq6mLIN-FR5qogA"
+        let globalToken = "token"
         cleanServer()
     }, [])
 
@@ -33,7 +33,7 @@ const Settings = () => {
                             <svg className="fill-white" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m249-207-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z" /></svg>
                         </button>
                         <div className="block bg-slate-200 p-2  m-2 ml-0 w-full rounded-3xl ">
-                            <span className="text-xl font-medium pl-1">Edit Databases</span>
+                            <span className="text-xl font-medium pl-1">Configured Databases</span>
                             <div className="mt-2">
                                 <div className="flex w-full bg-slate-300 p-2 rounded-t-2xl mb-2">
                                     <span className="flex-1 w-40">Organization</span>
@@ -59,22 +59,6 @@ const Settings = () => {
                                             </li>
                                         )
                                     })}
-                                </div>
-                                <div className="rounded-b-xl bg-slate-300 p-2">
-                                    <div className="py-2 grid grid-cols-2 gap-2">
-                                        <span>Organization Name</span>
-                                        <input type="text" className=" rounded-xl px-4 focus:outline-none" value={org} onChange={e => setOrg(e.target.value)} />
-                                        <span>Host</span>
-                                        <input type="text" className="rounded-xl px-4 focus:outline-none" value={host} onChange={e => setHost(e.target.value)} />
-                                        <span>Token</span>
-                                        <input type="password" className="rounded-xl px-4 focus:outline-none" value={token} onChange={e => setToken(e.target.value)} />
-                                        <span>Pick Color</span>
-                                        <input type="color" name="" id="" style={{ margin: "auto", width: "100%" }} value={color} onChange={e => setColor(e.target.value)} />
-                                    </div>
-                                    <button className=" bg-violet-300 text-white font-light p-1 rounded-full w-full hover:bg-violet-400 active:bg-violet-500 transition-color duration-200"
-                                        onClick={() => { addServer(org, host, token, color); setOrg(""); setHost(""), setToken(""), setColor("#ffffff") }}>
-                                        <svg className="fill-white mx-auto" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M440-200v-240H200v-80h240v-240h80v240h240v80H520v240h-80Z" /></svg>
-                                    </button>
                                 </div>
                             </div>
                         </div>
