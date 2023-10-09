@@ -14,7 +14,9 @@ const Settings = () => {
     useEffect(() => {
         let globalToken = "token"
         cleanServer()
-        addServer("Server 123", "localhost:8081", globalToken, "#DD7373", "http"); // Airline
+        addServer("AIRLINE XYZ", "ne-one-airline-1-9d58e17495dd.herokuapp.com", globalToken, "#DD7373","https"); // Airline
+        addServer("FORWARDER 123", "ne-one-forwarder1-310e540cd5dc.herokuapp.com", globalToken, "#EAD94C","https") // Forwarder
+        addServer("SHIPPER ABC", "ne-one-shipper1-7e0fd8738aaa.herokuapp.com", globalToken, "#51A3A3","https") // Shipper
     }, [])
 
     return (
