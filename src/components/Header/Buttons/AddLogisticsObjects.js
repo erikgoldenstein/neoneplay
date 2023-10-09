@@ -13,7 +13,7 @@ const AddLogisticsObjects = () => {
     const { servers } = useInternalStore()
 
     const LOOptions = Object.values(iri_description).filter((item) => item.Type == 'Class').map((item) => { return { label: item.Label, value: item.Label } })
-    const serverOptions = servers.map((item) => { return { label: item.org_name, value: item.host } })
+    const serverOptions = servers.map((item) => { return { label: item.org_name, value: item.host, protocol: item.protocol } })
 
 
     useEffect(() => {
@@ -29,7 +29,7 @@ const AddLogisticsObjects = () => {
             },
             "@type": "cargo:" + LOType.value
         }
-        let prom = fetch('https://' + server.value + "/logistics-objects", {
+        let prom = fetch(server.protocol + '://' + server.value + "/logistics-objects", {
             method: "POST",
             headers: {
                 "Content-Type": "application/ld+json",

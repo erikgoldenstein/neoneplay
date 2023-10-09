@@ -16,7 +16,7 @@ const useInternalStore = create((set, get) => ({
 
     // source managment
     cleanServer: () => set(() => ({ servers: [] })),
-    addServer: (name, host, token, color) => set((state) => ({ servers: [...state.servers, { org_name: name, host: host, token: token, color: color }] })),
+    addServer: (name, host, token, color, protocol) => set((state) => ({ servers: [...state.servers, { org_name: name, host: host, token: token, color: color, protocol: protocol }] })),
     removeServer: (index) => set((state) => ({ servers: state.servers.splice(index, 1) }))
 }))
 

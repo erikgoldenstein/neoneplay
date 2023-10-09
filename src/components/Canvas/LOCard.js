@@ -55,7 +55,6 @@ const LOCard = ({ id, data, isConnectable }) => {
 
 
     useEffect(() => {
-        console.log(data.uri)
         const host = data.uri.split("//").at(-1).split("/logistics-objects").at(0)
         servers.map((server, index) => {
             if (!host.indexOf(server.host)) {
