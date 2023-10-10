@@ -2,7 +2,7 @@
 import Header from "@/components/Header/Header";
 import useInternalStore from "@/store";
 import { shallow } from "zustand/shallow";
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import Canvas from "@/components/Canvas/Canvas";
 import { ReactFlowProvider } from "reactflow";
 
@@ -10,6 +10,7 @@ import { ReactFlowProvider } from "reactflow";
 export default function Home() {
   const [darkMode] = useInternalStore(state => [state.darkMode], shallow)
   const { addNodeFlag } = useInternalStore()
+  const [rfInstance, setRfInstance] = useState(null);
 
 
   useEffect(() => {
@@ -35,9 +36,9 @@ export default function Home() {
   return (
     <div className={`flex`}>
       <ReactFlowProvider>
-        <Canvas />
+        <Canvas setRfInstance={setRfInstance}/>
       </ReactFlowProvider>
-      <Header />
+      <Header reactFlow={rfInstance}/>
     </div >
   )
 }

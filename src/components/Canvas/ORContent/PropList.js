@@ -86,10 +86,7 @@ const PropList = ({ id, cardData, expansionState, links, setLinks, inEdit, setIn
                             if (objectDesc && objectDesc.Type == 'EmbeddedObject') {
                                 let embobj = embobject_properties[changeMap[index].type.split('#').pop()];
                                 for (const property of embobj.properties) {
-                                    console.log('dav')
-                                    console.log(standard_values['http://www.w3.org/2001/XMLSchema#dateTime'])
                                     let propertyDesc = iri_description[':' + property]
-                                    console.log(propertyDesc)
                                     if (propertyDesc && propertyDesc.Type == 'DataProperty') {
                                         changeObj.push(
                                             {

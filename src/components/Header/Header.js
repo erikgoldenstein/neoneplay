@@ -3,10 +3,11 @@ import Settings from './Buttons/Settings';
 import ThemeSwitch from './Buttons/ThemeSwitch';
 import Searchbar from './Searchbar';
 import AddLogisticsObjects from './Buttons/AddLogisticsObjects';
+import UploadSaveNetwork from './Buttons/UploadSaveNetwork';
 
 
 
-const Header = () => {
+const Header = (props) => {
     return (
         <header className="w-full bg-slate-50 dark:bg-slate-700 z-10 flex p-2 duration-200 transition-all">
             <div className="h-[5vw] w-[17vw] max-h-[60px] max-w-[210px] relative my-auto bg-slate-100 dark:bg-slate-800 rounded-full duration-200 transition-all" >
@@ -22,6 +23,8 @@ const Header = () => {
                 <AddLogisticsObjects />
                 <Settings />
                 <ThemeSwitch />
+                <UploadSaveNetwork reactflowInstance={props.reactFlow} />
+
             </div>
         </header >
     )

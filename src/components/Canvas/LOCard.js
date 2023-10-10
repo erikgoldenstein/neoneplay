@@ -81,7 +81,6 @@ const LOCard = ({ id, data, isConnectable }) => {
             }
         )
         prom.catch(() => { setIs404(true) })
-        console.log(is404)
         let res = await prom;
         let body = await res.json()
         let header_obj = {};

@@ -9,7 +9,7 @@ import FloatingConnectionLine from './Edge/FloatingConnectionLine';
 import EventPanel from './Events/EventPanel';
 
 
-const Canvas = () => {
+const Canvas = ({setRfInstance}) => {
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
@@ -66,6 +66,7 @@ const Canvas = () => {
                 onPaneClick={onPaneClick}
                 ref={rfCanvasRef}
                 style={{ cursor: (addNodeFlag ? "cell" : "") }}
+                onInit={setRfInstance}
                 onNodeClick={test}
             >
                 <MiniMap />
