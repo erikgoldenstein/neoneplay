@@ -34,7 +34,7 @@ const Settings = () => {
                             <svg className="fill-white" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m249-207-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z" /></svg>
                         </button>
                         <div className="block bg-slate-200 p-2  m-2 ml-0 w-full rounded-3xl ">
-                            <span className="text-xl font-medium pl-1">Configured Databases</span>
+                            <span className="text-xl font-medium pl-1">ONE Record Servers</span>
                             <div className="mt-2">
                                 <div className="flex w-full bg-slate-300 p-2 rounded-t-2xl mb-2">
                                     <span className="flex-1 w-40">Organization</span>
