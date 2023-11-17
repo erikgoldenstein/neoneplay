@@ -12,11 +12,9 @@ const Settings = () => {
     const [color, setColor] = useState("#ffffff")
 
     useEffect(() => {
-        let globalToken = "token"
-        cleanServer()
-        addServer("AIRLINE XYZ", "ne-one-airline-1-9d58e17495dd.herokuapp.com", globalToken, "#DD7373","https"); // Airline
-        addServer("FORWARDER 123", "ne-one-forwarder1-310e540cd5dc.herokuapp.com", globalToken, "#EAD94C","https") // Forwarder
-        addServer("SHIPPER ABC", "ne-one-shipper1-7e0fd8738aaa.herokuapp.com", globalToken, "#51A3A3","https") // Shipper
+        //addServer("AIRLINE XYZ", "ne-one-airline-1-9d58e17495dd.herokuapp.com", globalToken, "#DD7373","https"); // Airline
+        //addServer("FORWARDER 123", "ne-one-forwarder1-310e540cd5dc.herokuapp.com", globalToken, "#EAD94C","https") // Forwarder
+        //addServer("SHIPPER ABC", "ne-one-shipper1-7e0fd8738aaa.herokuapp.com", globalToken, "#51A3A3","https") // Shipper
     }, [])
 
     return (
@@ -43,7 +41,7 @@ const Settings = () => {
                                     <span className="flex-1 w-40">Host</span>
                                     <span className="flex-none">Action</span>
                                 </div>
-                                <div className="overflow-y-scroll h-[20vw] no-scrollbar">
+                                <div className="overflow-y-scroll h-[10vw] no-scrollbar">
                                     {servers.map((server, index) => {
                                         return (
                                             <li key={index} className="list-none border-b-2 border-violet-300 py-1 flex gap-2 ">
@@ -54,13 +52,29 @@ const Settings = () => {
                                                     <input className="mr-2" type="color" name="" id="" defaultValue={server.color} style={{ height: "100%" }} />
                                                     {/* Delete */}
                                                     <button className="flex-none bg-violet-300 p-1 rounded-full mr-auto"
-                                                        onClick={() => { removeServer(index) }}>
+                                                        onClick={() => { removeServer(server) }}>
                                                         <svg className="fill-white" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 96 960 960" width="24"><path d="M261 936q-24.75 0-42.375-17.625T201 876V306h-41v-60h188v-30h264v30h188v60h-41v570q0 24-18 42t-42 18H261Zm438-630H261v570h438V306ZM367 790h60V391h-60v399Zm166 0h60V391h-60v399ZM261 306v570-570Z" /></svg>
                                                     </button>
                                                 </div>
                                             </li>
                                         )
                                     })}
+                                </div>
+                                <div className="rounded-b-xl bg-slate-300 p-2">
+                                    <div className="py-2 grid grid-cols-2 gap-2">
+                                        <span>Organization Name</span>
+                                        <input type="text" className=" rounded-xl px-4 focus:outline-none" value={org} onChange={e => setOrg(e.target.value)} />
+                                        <span>Host</span>
+                                        <input type="text" className="rounded-xl px-4 focus:outline-none" value={host} onChange={e => setHost(e.target.value)} />
+                                        <span>Token</span>
+                                        <input type="password" className="rounded-xl px-4 focus:outline-none" value={token} onChange={e => setToken(e.target.value)} />
+                                        <span>Pick Color</span>
+                                        <input type="color" name="" id="" style={{ margin: "auto", width: "100%" }} value={color} onChange={e => setColor(e.target.value)} />
+                                    </div>
+                                    <button className=" bg-violet-300 text-white font-light p-1 rounded-full w-full hover:bg-violet-400 active:bg-violet-500 transition-color duration-200"
+                                        onClick={() => { addServer(org, host, token, color); setOrg(""); setHost(""), setToken(""), setColor("#ffffff") }}>
+                                        <svg className="fill-white mx-auto" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M440-200v-240H200v-80h240v-240h80v240h240v80H520v240h-80Z" /></svg>
+                                    </button>
                                 </div>
                             </div>
                         </div>
