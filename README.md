@@ -18,7 +18,7 @@ This is a [Hackathon](https://onerecord-fra.devpost.com) implementation of the [
 
 ### 🏁 Getting Started
 ```bash
-git clone https://github.com/erikgoldenstein/neoneplay.git
+git clone https://github.com/aloccid-iata/neoneplay.git
 cd neoneplay
 npm i
 npm run dev
