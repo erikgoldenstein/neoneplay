@@ -31,7 +31,7 @@ docker push $REPOS_URI:$PLACEHOLDER_TAG
 
 cd ..
 docker build -t $REPOS_NAME:$AREA_NAME -f ./Dockerfile ..
-cd ne-one-app-cdk
+cd ne-one-play-app-cdk
 
 docker tag $REPOS_NAME:$AREA_NAME $REPOS_URI:$AREA_NAME
 docker push $REPOS_URI:$AREA_NAME
