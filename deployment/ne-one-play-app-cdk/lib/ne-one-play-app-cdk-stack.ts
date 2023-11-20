@@ -27,7 +27,7 @@ export class NeOnePlayAppCdkStack extends cdk.Stack {
         serviceName: "neoneplayapp_" + envName,
         source: apprunner.Source.fromEcr({
             imageConfiguration: {
-                port: 3000,
+                port: tagName === envName ? 3000 : 8080,
             },
             repository: ecr.Repository.fromRepositoryName(this, "appImport", appContainerRepositoryName.valueAsString),
             tagOrDigest: tagName,      
