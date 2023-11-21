@@ -15,8 +15,6 @@ COPY . .
 
 RUN npm run build
 
-RUN ls -la
-
 FROM node as final
 
 COPY package*.json ./                   
