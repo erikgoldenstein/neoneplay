@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useInternalStore } from "react";
 ;
 
 function EventPanel({ selectedObject, setSelectedObject }) {
@@ -121,7 +121,7 @@ function EventPanel({ selectedObject, setSelectedObject }) {
                 token = server.token
             }
         })
-        
+
         let prom = fetch(selectedObject + "/logistics-events", {
             method: "POST",
             headers: {
