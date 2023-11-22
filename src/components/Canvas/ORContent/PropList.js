@@ -134,6 +134,16 @@ const PropList = ({ id, cardData, expansionState, links, setLinks, inEdit, setIn
                             body: JSON.stringify(body_obj)
                         })
                         if (res.status == 201) {
+                            let header_obj = {};
+                            res.headers.forEach((val, key) => { header_obj[key] = val })
+                            let acceptPatch = await fetch(header_obj['location']+'?status=REQUEST_ACCEPTED', {
+                                method: "PATCH",
+                                headers: {
+                                    "Content-Type": "application/ld+json",
+                                    "Accept": "application/ld+json",
+                                    "Authorization": "Bearer " + token
+                                }
+                            })
                             setInEdit(0)
                             setRefetch(true)
                         }

@@ -9,6 +9,7 @@ function EventPanel({ selectedObject, setSelectedObject }) {
     const [eventTimeType, setEventTimeType] = useState('')
     const [company, setCompany] = useState('')
     const [listLE, setListLE] = useState([])
+    const { servers } = useInternalStore()
 
 
 
@@ -35,11 +36,19 @@ function EventPanel({ selectedObject, setSelectedObject }) {
     }
 
     async function readLE(selectedObject) {
+        let token;
+        servers.map((server, index) => {
+            if (selectedObject.includes(server.host)) {
+                token = server.token
+            }
+        })
+
         let prom = fetch(selectedObject + "/logistics-events", {
             method: "GET",
             headers: {
                 "Content-Type": "application/ld+json",
-                "Accept": "application/ld+json"
+                "Accept": "application/ld+json",
+                "Authorization": "Bearer " + token
             }
         })
         let res = await prom;
@@ -105,11 +114,20 @@ function EventPanel({ selectedObject, setSelectedObject }) {
                 "@id": company
             }
         }
+
+        let token;
+        servers.map((server, index) => {
+            if (selectedObject.includes(server.host)) {
+                token = server.token
+            }
+        })
+        
         let prom = fetch(selectedObject + "/logistics-events", {
             method: "POST",
             headers: {
                 "Content-Type": "application/ld+json",
-                "Accept": "application/ld+json"
+                "Accept": "application/ld+json",
+                "Authorization": "Bearer " + token
             },
             body: JSON.stringify(body_obj)
         })
