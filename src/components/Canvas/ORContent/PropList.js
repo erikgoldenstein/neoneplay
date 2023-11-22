@@ -35,7 +35,7 @@ const PropList = ({ id, cardData, expansionState, links, setLinks, inEdit, setIn
                                     "api:p": "https://onerecord.iata.org/ns/cargo#" + changeMap[index].label,
                                     "api:o": [{
                                         "@type": "api:OperationObject",
-                                        "api:hasDatatype": changeMap[index].type,
+                                        "api:hasDatatype": changeMap[index].type ? changeMap[index].type : "http://www.w3.org/2001/XMLSchema#string",
                                         "api:hasValue": changeMap[index].oldValue
                                     }]
                                 });
@@ -47,7 +47,7 @@ const PropList = ({ id, cardData, expansionState, links, setLinks, inEdit, setIn
                                     "api:p": "https://onerecord.iata.org/ns/cargo#" + changeMap[index].label,
                                     "api:o": [{
                                         "@type": "api:OperationObject",
-                                        "api:hasDatatype": changeMap[index].type,
+                                        "api:hasDatatype": changeMap[index].type ? changeMap[index].type : "http://www.w3.org/2001/XMLSchema#string",
                                         "api:hasValue": changeMap[index].newValue
                                     }]
                                 })
@@ -62,7 +62,7 @@ const PropList = ({ id, cardData, expansionState, links, setLinks, inEdit, setIn
                                     "api:p": "https://onerecord.iata.org/ns/cargo#" + changeMap[index].label,
                                     "api:o": [{
                                         "@type": "api:OperationObject",
-                                        "api:hasDatatype": changeMap[index].type,
+                                        "api:hasDatatype": changeMap[index].type ? changeMap[index].type : "http://www.w3.org/2001/XMLSchema#string",
                                         "api:hasValue": changeMap[index].oldValue
                                     }]
                                 });
@@ -76,7 +76,7 @@ const PropList = ({ id, cardData, expansionState, links, setLinks, inEdit, setIn
                                     "api:p": "https://onerecord.iata.org/ns/cargo#" + changeMap[index].label,
                                     "api:o": [{
                                         "@type": "api:OperationObject",
-                                        "api:hasDatatype": changeMap[index].type,
+                                        "api:hasDatatype": changeMap[index].type ? changeMap[index].type : "http://www.w3.org/2001/XMLSchema#string",
                                         "api:hasValue": changeMap[index].newValue
                                     }]
                                 });
@@ -96,7 +96,7 @@ const PropList = ({ id, cardData, expansionState, links, setLinks, inEdit, setIn
                                                 "api:p": "https://onerecord.iata.org/ns/cargo#"+property,
                                                 "api:o": [{
                                                     "@type": "api:OperationObject",
-                                                    "api:hasDatatype": propertyDesc.TypeIRI,
+                                                    "api:hasDatatype": propertyDesc.TypeIRI ? propertyDesc.TypeIRI : "http://www.w3.org/2001/XMLSchema#string",
                                                     "api:hasValue": standard_values[propertyDesc.TypeIRI]
                                                 }]
                                             });
