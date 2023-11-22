@@ -1,5 +1,5 @@
-import { useEffect, useState, useInternalStore } from "react";
-;
+import { useEffect, useState } from "react";
+import useInternalStore from "@/store";
 
 function EventPanel({ selectedObject, setSelectedObject }) {
     const [showEventPanel, setShowEventPanel] = useState(false)
@@ -62,12 +62,10 @@ function EventPanel({ selectedObject, setSelectedObject }) {
             } else {
                 eventList.push(body)
             }
-            console.log(eventList)
-            let cargo = 'https://onerecord.iata.org/ns/cargo#'
             if (eventList.length > 1) {
                 eventList.sort(function (a, b) {
-                    a[cargo + 'eventDate']['@value']
-                    return new Date(b[cargo + 'eventDate']['@value']) - new Date(a[cargo + 'eventDate']['@value']);
+                    a['eventDate']['@value']
+                    return new Date(b['eventDate']['@value']) - new Date(a['eventDate']['@value']);
                 })
             }
             let list = []
@@ -76,10 +74,10 @@ function EventPanel({ selectedObject, setSelectedObject }) {
                     let key = Math.random().toString(36).slice(2, 7);
                     list.push(
                         <tr key={key}>
-                            <td className="border border-slate-600 text-center">{event[cargo + 'eventName']}</td>
-                            <td className="border border-slate-600 text-center">{event[cargo + 'eventCode']}</td>
-                            <td className="border border-slate-600 text-center">{event[cargo + 'eventDate']['@value'].replace('T', ' ').replace('Z', '')}</td>
-                            <td className="border border-slate-600 text-center">{event[cargo + 'eventTimeType']}</td>
+                            <td className="border border-slate-600 text-center">{event['eventName']}</td>
+                            <td className="border border-slate-600 text-center">{event['eventCode']}</td>
+                            <td className="border border-slate-600 text-center">{event['eventDate']['@value'].replace('T', ' ').replace('Z', '')}</td>
+                            <td className="border border-slate-600 text-center">{event['eventTimeType']}</td>
                         </tr>
                     )
                 })

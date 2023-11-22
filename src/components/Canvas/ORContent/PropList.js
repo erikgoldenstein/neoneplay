@@ -144,6 +144,8 @@ const PropList = ({ id, cardData, expansionState, links, setLinks, inEdit, setIn
                                     "Authorization": "Bearer " + token
                                 }
                             })
+                            //Add slip to let the server process the request before reload
+                            await new Promise(r => setTimeout(r, 3000));
                             setInEdit(0)
                             setRefetch(true)
                         }
